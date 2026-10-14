@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zomato Clone – Discover the Best Food Near You</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--red:#e23744;--bg:#fff;--surface:#fff;--soft:#f8f8f8;--text:#1c1c1c;--muted:#696969;--border:#e8e8e8;--footer:#f8f8f8;--shadow:0 4px 18px rgba(0,0,0,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121212;--surface:#1e1e1e;--soft:#181818;--text:#f2f2f2;--muted:#a5a5a5;--border:#333;--footer:#181818;--shadow:0 4px 18px rgba(0,0,0,.5)}}
+:root[data-theme="dark"]{--bg:#121212;--surface:#1e1e1e;--soft:#181818;--text:#f2f2f2;--muted:#a5a5a5;--border:#333;--footer:#181818;--shadow:0 4px 18px rgba(0,0,0,.5)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Poppins","Segoe UI",Roboto,Arial,sans-serif;line-height:1.5}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+section{padding:48px 0}
+h2{font-size:1.75rem;margin:0 0 6px}
+.sub{color:var(--muted);margin:0 0 24px}
+.btn{display:inline-block;border:0;border-radius:10px;padding:12px 26px;font:600 1rem inherit;font-family:inherit;cursor:pointer;background:var(--red);color:#fff;transition:.2s}
+.btn:hover{filter:brightness(.92);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--text)}
+.btn.ghost:hover{color:var(--red);background:transparent}
+
+/* nav */
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--surface);border-bottom:1px solid var(--border)}
+nav .wrap{display:flex;align-items:center;gap:20px;height:68px}
+.logo{font-size:1.9rem;font-weight:800;font-style:italic;color:var(--red);letter-spacing:-1px}
+.links{display:flex;gap:6px;margin-left:auto;align-items:center}
+.links a{padding:8px 14px;border-radius:8px;color:var(--muted);font-weight:500}
+.links a:hover{color:var(--red)}
+.links .btn{padding:8px 18px}
+.burger{display:none;margin-left:auto;background:none;border:0;font-size:1.6rem;color:var(--text)}
+
+/* hero */
+.hero{position:relative;color:#fff;text-align:center;padding:90px 0 110px;overflow:hidden;
+background:linear-gradient(135deg,rgba(20,10,10,.72),rgba(120,20,30,.55)),radial-gradient(circle at 20% 30%,#ff9a3c 0,transparent 40%),radial-gradient(circle at 80% 70%,#e23744 0,transparent 45%),#3a1414}
+.hero::before{content:"🍕 🍔 🍜 🍣 🥗 🍰 🌮 🍛 🍗 🥘 🍩 🍝 🥟 🍤 🍟 🥪 🍦 🍲";position:absolute;inset:-20px;font-size:3.4rem;line-height:1.9;letter-spacing:34px;opacity:.14;word-break:break-all;transform:rotate(-8deg);pointer-events:none}
+.hero .wrap{position:relative}
+.hero h1{font-size:clamp(2rem,5vw,3.6rem);margin:0 0 14px;line-height:1.15}
+.hero p{font-size:1.15rem;max-width:620px;margin:0 auto 28px;opacity:.95}
+.search{display:flex;max-width:860px;margin:36px auto 0;background:var(--surface);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;color:var(--text)}
+.search .f{display:flex;align-items:center;gap:8px;padding:0 16px;flex:1;min-width:0}
+.search .f+.f{border-left:1px solid var(--border);flex:1.6}
+.search input{border:0;outline:0;background:transparent;color:var(--text);font:1rem inherit;font-family:inherit;width:100%;padding:18px 0}
+.search .btn{border-radius:0;padding:0 34px}
+
+/* categories */
+.grid{display:grid;gap:20px}
+.cats{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:.25s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.cat{text-align:center;padding-bottom:16px}
+.img{display:flex;align-items:center;justify-content:center;font-size:3.6rem;height:130px}
+.cat h3{margin:10px 0 2px;font-size:1.05rem}
+.cat p{margin:0;padding:0 12px;font-size:.85rem;color:var(--muted)}
+.g1{background:linear-gradient(135deg,#ffd9a0,#ff9f5a)}.g2{background:linear-gradient(135deg,#ffc2c7,#ff6b7a)}
+.g3{background:linear-gradient(135deg,#d6f5c2,#7bd36b)}.g4{background:linear-gradient(135deg,#fff0a6,#ffc933)}
+.g5{background:linear-gradient(135deg,#d7d2ff,#9a8cff)}.g6{background:linear-gradient(135deg,#b9ecf5,#4cc3d9)}
+.g7{background:linear-gradient(135deg,#f6d1ff,#d77bf0)}.g8{background:linear-gradient(135deg,#ffd7bf,#e8864f)}
+
+/* restaurants */
+.rest{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.rest .img{height:170px;font-size:4.2rem;position:relative}
+.tag{position:absolute;left:0;bottom:12px;background:#2a5bd7;color:#fff;font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:0 6px 6px 0}
+.body{padding:14px 16px 16px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.body h3{margin:0;font-size:1.1rem}
+.rating{background:#267e3e;color:#fff;font-weight:600;font-size:.82rem;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.cuisine{color:var(--muted);font-size:.9rem;margin:4px 0 10px}
+.meta{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px}
+
+/* offers */
+.offers{background:var(--soft)}
+.off{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.offer{display:flex;flex-direction:column}
+.offer .img{height:150px;font-size:4.6rem}
+.offer .body{display:flex;flex-direction:column;gap:6px;flex:1}
+.offer h3{margin:0;font-size:1.25rem}
+.offer .disc{color:var(--red);font-weight:700;font-size:1.05rem}
+.offer p{margin:0 0 10px;color:var(--muted);font-size:.9rem}
+.offer .btn{margin-top:auto;text-align:center}
+
+/* footer */
+footer{background:var(--footer);border-top:1px solid var(--border);padding:48px 0 24px}
+.fgrid{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:28px}
+footer h4{margin:0 0 12px;font-size:1rem}
+footer ul{list-style:none;margin:0;padding:0}
+footer li{margin-bottom:8px;color:var(--muted);font-size:.92rem}
+footer li:hover{color:var(--red)}
+.fbrand p{color:var(--muted);font-size:.92rem;margin:8px 0 14px}
+.social{display:flex;gap:10px}
+.social a{width:38px;height:38px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:grid;place-items:center;font-weight:700;color:var(--muted);transition:.2s}
+.social a:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.copy{margin-top:34px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem;text-align:center}
+
+/* responsive */
+@media (max-width:900px){.fgrid{grid-template-columns:1fr 1fr}.fbrand{grid-column:1/-1}}
+@media (max-width:720px){
+.burger{display:block}
+.links{display:none;position:absolute;top:68px;left:0;right:0;background:var(--surface);flex-direction:column;align-items:stretch;padding:12px 20px 18px;border-bottom:1px solid var(--border);margin:0}
+.links.open{display:flex}
+.links a{padding:12px 6px}
+.search{flex-direction:column;border-radius:14px}
+.search .f+.f{border-left:0;border-top:1px solid var(--border)}
+.search .btn{padding:16px}
+.hero{padding:60px 0 70px}
+section{padding:36px 0}
+}
+@media (max-width:480px){.fgrid{grid-template-columns:1fr}.cats{grid-template-columns:repeat(2,1fr)}.rest{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+ <div class="wrap">
+  <a class="logo" href="#">zomato</a>
+  <button class="burger" aria-label="Menu" onclick="document.getElementById('menu').classList.toggle('open')">☰</button>
+  <div class="links" id="menu">
+   <a href="#search">Search Restaurants</a>
+   <a href="#">Add Restaurant</a>
+   <a href="#">Log in</a>
+   <a class="btn" href="#">Sign up</a>
+  </div>
+ </div>
+</nav>
+
+<header class="hero">
+ <div class="wrap">
+  <h1>Discover the Best Food Near You</h1>
+  <p>Order from top-rated restaurants, explore new cuisines and enjoy lightning-fast delivery right to your doorstep.</p>
+  <a class="btn" href="#restaurants">Explore Restaurants</a>
+  <div class="search" id="search">
+   <div class="f">📍<input type="text" placeholder="Enter your location" aria-label="Location"></div>
+   <div class="f">🔍<input type="text" placeholder="Search for restaurant, cuisine or a dish" aria-label="Search"></div>
+   <button class="btn">Search</button>
+  </div>
+ </div>
+</header>
+
+<section>
+ <div class="wrap">
+  <h2>What's on your mind?</h2>
+  <p class="sub">Explore by your favourite food categories</p>
+  <div class="grid cats">
+   <a class="card cat" href="#"><div class="img g1">🍕</div><h3>Pizza</h3><p>Cheesy, hot &amp; freshly baked</p></a>
+   <a class="card cat" href="#"><div class="img g2">🍔</div><h3>Burgers</h3><p>Juicy stacks with crispy fries</p></a>
+   <a class="card cat" href="#"><div class="img g8">🍛</div><h3>Biryani</h3><p>Aromatic, slow-cooked rice</p></a>
+   <a class="card cat" href="#"><div class="img g3">🥗</div><h3>Healthy</h3><p>Fresh salads &amp; light bowls</p></a>
+   <a class="card cat" href="#"><div class="img g4">🍜</div><h3>Chinese</h3><p>Noodles, momos &amp; more</p></a>
+   <a class="card cat" href="#"><div class="img g7">🍰</div><h3>Desserts</h3><p>Sweet treats for every mood</p></a>
+   <a class="card cat" href="#"><div class="img g6">🍣</div><h3>Sushi</h3><p>Japanese rolls, fresh daily</p></a>
+   <a class="card cat" href="#"><div class="img g5">🌮</div><h3>Mexican</h3><p>Tacos, burritos &amp; nachos</p></a>
+  </div>
+ </div>
+</section>
+
+<section id="restaurants" style="padding-top:0">
+ <div class="wrap">
+  <h2>Popular Restaurants</h2>
+  <p class="sub">Top picks loved by food lovers around you</p>
+  <div class="grid rest">
+   <a class="card" href="#"><div class="img g8">🍛<span class="tag">20% OFF</span></div><div class="body"><div class="row"><h3>Spice Route Kitchen</h3><span class="rating">4.5 ★</span></div><div class="cuisine">Biryani, North Indian</div><div class="meta"><span>₹500 for two</span><span>🕒 30 min</span></div></div></a>
+   <a class="card" href="#"><div class="img g1">🍕<span class="tag">FREE DELIVERY</span></div><div class="body"><div class="row"><h3>The Pizza Oven</h3><span class="rating">4.3 ★</span></div><div class="cuisine">Pizza, Italian</div><div class="meta"><span>₹600 for two</span><span>🕒 35 min</span></div></div></a>
+   <a class="card" href="#"><div class="img g2">🍔<span class="tag">₹100 OFF</span></div><div class="body"><div class="row"><h3>Burger Junction</h3><span class="rating">4.1 ★</span></div><div class="cuisine">Burgers, Fast Food</div><div class="meta"><span>₹350 for two</span><span>🕒 25 min</span></div></div></a>
+   <a class="card" href="#"><div class="img g4">🍜<span class="tag">30% OFF</span></div><div class="body"><div class="row"><h3>Dragon Wok</h3><span class="rating">4.4 ★</span></div><div class="cuisine">Chinese, Asian</div><div class="meta"><span>₹450 for two</span><span>🕒 30 min</span></div></div></a>
+   <a class="card" href="#"><div class="img g6">🍣</div><div class="body"><div class="row"><h3>Sakura Sushi Bar</h3><span class="rating">4.6 ★</span></div><div class="cuisine">Japanese, Sushi</div><div class="meta"><span>₹1,200 for two</span><span>🕒 40 min</span></div></div></a>
+   <a class="card" href="#"><div class="img g3">🥗<span class="tag">HEALTHY</span></div><div class="body"><div class="row"><h3>Green Bowl Café</h3><span class="rating">4.2 ★</span></div><div class="cuisine">Salads, Healthy Food</div><div class="meta"><span>₹400 for two</span><span>🕒 20 min</span></div></div></a>
+   <a class="card" href="#"><div class="img g7">🍰<span class="tag">BUY 1 GET 1</span></div><div class="body"><div class="row"><h3>Sweet Tooth Bakery</h3><span class="rating">4.7 ★</span></div><div class="cuisine">Desserts, Bakery</div><div class="meta"><span>₹300 for two</span><span>🕒 25 min</span></div></div></a>
+   <a class="card" href="#"><div class="img g5">🌮</div><div class="body"><div class="row"><h3>Taco Fiesta</h3><span class="rating">4.0 ★</span></div><div class="cuisine">Mexican, Tex-Mex</div><div class="meta"><span>₹550 for two</span><span>🕒 35 min</span></div></div></a>
+  </div>
+ </div>
+</section>
+
+<section class="offers">
+ <div class="wrap">
+  <h2>Special Offers</h2>
+  <p class="sub">Grab these deals before they're gone</p>
+  <div class="grid off">
+   <div class="card offer"><div class="img g2">🍔</div><div class="body"><h3>Burger Bonanza</h3><span class="disc">Flat 40% OFF up to ₹120</span><p>On your first order from any burger outlet. Use code BURGER40.</p><a class="btn" href="#">Order Now</a></div></div>
+   <div class="card offer"><div class="img g1">🍕</div><div class="body"><h3>Pizza Party</h3><span class="disc">Buy 1 Get 1 Free</span><p>Valid on medium and large pizzas at selected restaurants.</p><a class="btn" href="#">Order Now</a></div></div>
+   <div class="card offer"><div class="img g7">🍨</div><div class="body"><h3>Sweet Weekend</h3><span class="disc">Free dessert on orders above ₹499</span><p>Treat yourself every Saturday and Sunday. No code needed.</p><a class="btn" href="#">Order Now</a></div></div>
+  </div>
+ </div>
+</section>
+
+<footer>
+ <div class="wrap">
+  <div class="fgrid">
+   <div class="fbrand">
+    <a class="logo" href="#">zomato</a>
+    <p>Discover great food, restaurants and experiences near you.</p>
+    <div class="social"><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="Twitter">𝕏</a><a href="#" aria-label="Instagram">in</a><a href="#" aria-label="YouTube">▶</a></div>
+   </div>
+   <div><h4>About Zomato</h4><ul><li>Who We Are</li><li>Careers</li><li>Blog</li><li>Press</li></ul></div>
+   <div><h4>Restaurant Partners</h4><ul><li>Add Your Restaurant</li><li>Partner Login</li><li>Business App</li></ul></div>
+   <div><h4>Customer Support</h4><ul><li>Help Center</li><li>Contact Us</li><li>Report an Issue</li></ul></div>
+   <div><h4>Legal</h4><ul><li>Privacy Policy</li><li>Terms and Conditions</li><li>Cookie Policy</li></ul></div>
+  </div>
+  <div class="copy">© 2026 Zomato Clone. Built for a frontend practice challenge — not affiliated with Zomato.</div>
+ </div>
+</footer>
+
+</body>
+</html>
